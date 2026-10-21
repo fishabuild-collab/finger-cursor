@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Finger Cursor</title>
+<style>
+  :root { --bg: #eef3f6; --ink: #1f2a33; --muted: #5d6b77; --card: #ffffff; --line: #d6e0e7; --accent: #8fd3ea; }
+  * { box-sizing: border-box; }
+  body { margin: 0; font: 16px/1.5 ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif; color: var(--ink);
+    background: radial-gradient(circle at 20% 10%, #fff 0, var(--bg) 60%); min-height: 100vh; }
+  main { max-width: 860px; margin: 0 auto; padding: 64px 20px; }
+  h1 { font-size: clamp(36px, 7vw, 64px); line-height: 1; margin: 0 0 12px; letter-spacing: -0.03em; }
+  p.lead { color: var(--muted); font-size: 18px; margin: 0 0 40px; max-width: 560px; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 14px; margin-bottom: 40px; }
+  .tile { aspect-ratio: 1; border-radius: 18px; background: var(--card); border: 1px solid var(--line);
+    display: grid; place-items: center; font-size: 34px; user-select: none; transition: transform .12s, background .2s; }
+  .tile:active { transform: scale(.96); background: #e4f6fc; }
+  .tile b { font-size: 13px; color: var(--muted); font-weight: 600; display: block; text-align: center; }
+  .controls { display: flex; flex-wrap: wrap; gap: 12px 24px; align-items: center; padding: 18px 20px; border-radius: 16px;
+    background: var(--card); border: 1px solid var(--line); margin-bottom: 32px; }
+  .controls label { display: flex; gap: 8px; align-items: center; font-size: 14px; color: var(--muted); }
+  button.seg { border: 1px solid var(--line); background: #f6f9fb; padding: 6px 14px; border-radius: 999px; font: inherit; font-size: 14px; }
+  button.seg[aria-pressed="true"] { background: var(--ink); color: #fff; border-color: var(--ink); }
+  pre { background: #1f2a33; color: #e6eef3; padding: 18px; border-radius: 14px; overflow-x: auto; font-size: 14px; }
+  #count { font-variant-numeric: tabular-nums; }
+</style>
+</head>
+<body>
+<main>
+  <h1>Finger Cursor</h1>
+  <p class="lead">Your cursor is now a telescopic finger pointer. It floats above the page with a soft shadow. Click and it taps the glass: the shadow tucks in under the fingertip, with a little <em>tok</em>.</p>
+
+  <div class="controls">
+    <span style="display:flex;gap:6px">
+      <button class="seg" data-hand="point" aria-pressed="true">☝️ Point</button>
+      <button class="seg" data-hand="peace" aria-pressed="false">✌️ Peace</button>
+    </span>
+    <label>Colour <input type="color" id="color" value="#8fd3ea"></label>
+    <label>Size <input type="range" id="size" min="0.6" max="1.6" step="0.05" value="1"></label>
+    <label>Hover height <input type="range" id="depth" min="0.2" max="1.5" step="0.05" value="1"></label>
+    <label><input type="checkbox" id="sound" checked> Sound</label>
+  </div>
+
+  <div class="grid" id="grid"></div>
+  <p>Taps: <strong id="count">0</strong></p>
+
+  <h2>Use it</h2>
+<pre>&lt;script src="finger-cursor.js" data-auto&gt;&lt;/script&gt;
+
+&lt;!-- or --&gt;
+&lt;script src="finger-cursor.js"&gt;&lt;/script&gt;
+&lt;script&gt;
+  const cursor = FingerCursor.init({ hand: 'peace', color: '#ffb3c7', sound: true });
+&lt;/script&gt;</pre>
+</main>
+
+<script src="finger-cursor.js"></script>
+<script>
+  const cursor = FingerCursor.init();
+  const emojis = ['🍎', '⭐', '🎈', '🐟', '🧁', '🔔', '🌵', '🎯'];
+  const grid = document.getElementById('grid');
+  let taps = 0;
+  emojis.forEach((e) => {
+    const t = document.createElement('div');
+    t.className = 'tile';
+    t.innerHTML = `<span>${e}<b>tap me</b></span>`;
+    grid.appendChild(t);
+  });
+  document.addEventListener('pointerdown', () => { document.getElementById('count').textContent = ++taps; });
+
+  document.querySelectorAll('[data-hand]').forEach((b) => b.addEventListener('click', () => {
+    document.querySelectorAll('[data-hand]').forEach((x) => x.setAttribute('aria-pressed', x === b));
+    cursor.set({ hand: b.dataset.hand });
+  }));
+  document.getElementById('color').addEventListener('input', (e) => cursor.set({ color: e.target.value }));
+  document.getElementById('size').addEventListener('input', (e) => cursor.set({ size: +e.target.value }));
+  document.getElementById('depth').addEventListener('input', (e) => cursor.set({ hoverDepth: +e.target.value }));
+  document.getElementById('sound').addEventListener('change', (e) => cursor.set({ sound: e.target.checked }));
+</script>
+</body>
+</html>
