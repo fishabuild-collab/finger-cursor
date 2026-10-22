@@ -14,13 +14,16 @@
     point: {
       hotspot: [0, 0],
       svg:
-        '<path class="fc-skin" d="M-10 56 L10 56 L5.5 80 L-5.5 80 Z"/>' +
-        '<rect class="fc-skin" x="-25" y="35" width="12" height="23" rx="6" transform="rotate(-22 -19 46)"/>' +
-        '<rect class="fc-skin" x="-17" y="27" width="34" height="35" rx="13"/>' +
-        '<rect class="fc-skin" x="-6.5" y="0" width="13" height="40" rx="6.5"/>' +
-        '<path class="fc-line" d="M5 36 q8 0 10 5 M5 44 q8 0 10 5 M5 52 q7 0 9 4"/>' +
-        '<path class="fc-shine" d="M-2.5 6 L-2.5 24"/>' +
-        '<path class="fc-shine" d="M-11 33 L-11 50"/>'
+        // Index finger rises from the thumb side of the fist, with the other
+        // three fingers curled up beside it, so it reads as ☝️ and not 🖕.
+        '<path class="fc-skin" d="M-7 58 L17 58 L5.5 80 L-5.5 80 Z"/>' +
+        '<rect class="fc-skin" x="-9" y="28" width="34" height="34" rx="12"/>' +
+        '<rect class="fc-skin" x="-6.5" y="0" width="13" height="42" rx="6.5"/>' +
+        '<rect class="fc-skin" x="5" y="30" width="22" height="10" rx="5"/>' +
+        '<rect class="fc-skin" x="5" y="39" width="22" height="10" rx="5"/>' +
+        '<rect class="fc-skin" x="5" y="48" width="20" height="10" rx="5"/>' +
+        '<rect class="fc-skin" x="-13" y="45" width="24" height="11" rx="5.5" transform="rotate(-14 -1 50)"/>' +
+        '<path class="fc-shine" d="M-2.5 6 L-2.5 26"/>'
     },
     peace: {
       hotspot: [-14, 3],
