@@ -29,7 +29,7 @@
 <body>
 <main>
   <h1>Finger Cursor</h1>
-  <p class="lead">Your cursor is now a telescopic finger pointer. It floats above the page with a soft shadow. Click and it taps the glass: the shadow tucks in under the fingertip, with a little <em>tok</em>.</p>
+  <p class="lead">Your cursor is now a telescopic finger pointer. It's a real 3D model (three.js) casting a real shadow onto the page. Click and the tip drops onto the glass with a hard plastic <em>tick</em>.</p>
 
   <div class="controls">
     <span style="display:flex;gap:6px">
@@ -46,18 +46,19 @@
   <p>Taps: <strong id="count">0</strong></p>
 
   <h2>Use it</h2>
-<pre>&lt;script src="finger-cursor.js" data-auto&gt;&lt;/script&gt;
+<pre>&lt;script type="module" src="finger-cursor.js" data-auto&gt;&lt;/script&gt;
 
 &lt;!-- or --&gt;
-&lt;script src="finger-cursor.js"&gt;&lt;/script&gt;
-&lt;script&gt;
-  const cursor = FingerCursor.init({ hand: 'peace', color: '#ffb3c7', sound: true });
+&lt;script type="module"&gt;
+  import FingerCursor from './finger-cursor.js';
+  const cursor = await FingerCursor.init({ hand: 'peace', color: '#ffb3c7' });
 &lt;/script&gt;</pre>
 </main>
 
-<script src="finger-cursor.js"></script>
-<script>
-  const cursor = FingerCursor.init();
+<script type="module">
+  import FingerCursor from './finger-cursor.js';
+  const cursor = await FingerCursor.init();
+  window.cursor = cursor;
   const emojis = ['🍎', '⭐', '🎈', '🐟', '🧁', '🔔', '🌵', '🎯'];
   const grid = document.getElementById('grid');
   let taps = 0;

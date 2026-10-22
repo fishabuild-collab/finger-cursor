@@ -1,32 +1,37 @@
 # finger-cursor
 
-Turn your website's cursor into a telescopic finger pointer, the little stick with a rubber hand on the end.
+Turn your website's cursor into a 3D telescopic finger pointer, the classroom stick with a rubber hand on the end.
 
-- A soft shadow sits under the pointer so it looks like it's floating above the screen.
-- Click and it taps the glass: the pointer dips, the shadow slides in under the fingertip, and you hear a small "tok".
-- One file, no dependencies, no images or audio files. Everything is inline SVG and Web Audio.
+- Rendered with [three.js](https://threejs.org), loaded on demand from a CDN. You don't need to install it.
+- The pointer floats above the page and casts a real shadow onto it.
+- Click and the fingertip drops onto the glass with a hard plastic "tick" (synthesized with Web Audio, so there are no sound files).
+
+**[Live demo](https://fishabuild-collab.github.io/finger-cursor/)**
 
 ## Quick start
 
 ```html
-<script src="finger-cursor.js" data-auto></script>
+<script type="module" src="finger-cursor.js" data-auto></script>
 ```
 
 Or set it up yourself:
 
 ```html
-<script src="finger-cursor.js"></script>
-<script>
-  const cursor = FingerCursor.init({
+<script type="module">
+  import FingerCursor from './finger-cursor.js';
+
+  const cursor = await FingerCursor.init({
     hand: 'point',     // 'point' or 'peace'
     color: '#8fd3ea',  // rubber hand and handle colour
     size: 1,           // overall scale
-    angle: -32,        // rod angle in degrees
+    angle: -32,        // rod angle on screen, in degrees
+    elevation: 26,     // how steeply the rod rises off the screen
     hoverDepth: 1,     // how high it floats (0 = touching)
     tilt: true,        // lean a little as you move
     ripple: true,      // ring on the screen when you tap
-    sound: true,       // tap sound
-    volume: 0.5
+    sound: true,       // plastic tap sound
+    volume: 0.5,
+    three: undefined   // pass your own THREE module to skip the CDN fetch
   });
 
   cursor.set({ hand: 'peace' }); // change options live
@@ -38,14 +43,14 @@ Or set it up yourself:
 
 ## How the depth works
 
-The pointer and its shadow are the same SVG drawn twice. The shadow copy is turned black, blurred and offset down-right.
+A transparent WebGL canvas covers the page. The camera is set up so the page plane maps 1:1 onto screen pixels. The pointer is a real 3D model held above that plane: the fingertip sits under your mouse, and the rod rises off the glass towards you.
 
-- **Hovering:** large offset, more blur, lighter shadow.
-- **Tapping:** the offset drops to almost zero so the shadow meets the fingertip, the blur tightens, and the pointer shrinks a little as it moves "into" the screen.
+- An invisible "page" plane only draws shadows, so the pointer casts a real shadow on your content. A soft contact shadow under the fingertip darkens as it gets closer.
+- **Hovering:** the tip floats above the page, so its shadow falls away from it.
+- **Tapping:** a spring drops the tip onto the glass and the shadow meets it. The far end of the rod still throws its shadow further away, the same as a real stick held at an angle.
+- The tip is moved along the camera ray, so the fingertip always lines up with the real mouse position, even while it's lifted.
 
-The shadow is also scaled up slightly around the fingertip. Even while the tip touches the screen, the far end of the rod still throws its shadow further away, the same as a real stick held at an angle. A spring animates the depth, so taps land fast and lift off softly.
-
-On touch devices (no hover pointer) the library does nothing and the normal behaviour is left alone.
+On touch devices (no hover pointer), or if WebGL or the CDN isn't available, the library does nothing and the normal cursor stays.
 
 ## Demo
 
